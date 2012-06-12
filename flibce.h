@@ -14,11 +14,16 @@ extern "C" {
 int createRingBuffer(int size);
 void removeRingBuffer(int ring);
 void removeAllRingBuffer();
-int countOfRingBuffer(int ring);
+int countByteOfRingBuffer(int ring);
 void clearRingBuffer(int ring);
-int writeToRingBuffer(int ring, char *data, int len);
-int readFromRingBuffer(int ring, char *data, int len);
-char watchFromRingBuffer(int ring, int offset);
+int writeBytesToRingBuffer(int ring, unsigned char *data, int len);
+int readBytesFromRingBuffer(int ring, unsigned char *data, int len);
+unsigned char watchByteFromRingBuffer(int ring, int offset);
+
+int countBitOfRingBuffer(int ring);
+int writeBitsToRingBuffer(int ring, unsigned char *data, int len);
+int readBitsFromRingBuffer(int ring, unsigned char *data, int len);
+unsigned char watchBitsFromRingBuffer(int ring, int offset);
 
 #ifdef __cplusplus
 }
