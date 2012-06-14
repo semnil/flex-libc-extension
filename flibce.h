@@ -19,11 +19,13 @@ void clearRingBuffer(int ring);
 int writeBytesToRingBuffer(int ring, unsigned char *data, int len);
 int readBytesFromRingBuffer(int ring, unsigned char *data, int len);
 unsigned char watchByteFromRingBuffer(int ring, int offset);
+void skipBytesFromRingBuffer(int ring, int offset);
 
 int countBitOfRingBuffer(int ring);
 int writeBitsToRingBuffer(int ring, unsigned char *data, int len);
 int readBitsFromRingBuffer(int ring, unsigned char *data, int len);
 unsigned char watchBitsFromRingBuffer(int ring, int offset);
+void skipBitsFromRingBuffer(int ring, int offset);
 
 #ifdef __cplusplus
 }

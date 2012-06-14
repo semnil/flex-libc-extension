@@ -173,6 +173,25 @@ unsigned char watchByteFromRingBuffer(int ring, int offset)
 	return g_pRingBuffers[ring].ptr[rtc];
 }
 
+void skipBytesFromRingBuffer(int ring, int offset)
+{
+	unsigned char *ptr;
+	int nRead;
+	int nSize;
+	int rtc;
+
+	if (ring < 0 || ring >= g_nRingBuffer)
+		return;
+
+	ptr = g_pRingBuffers[ring].ptr;
+	nRead = g_pRingBuffers[ring].nRead;
+	nSize = g_pRingBuffers[ring].nSize;
+
+	rtc = indexOfRingBuffer(nRead, offset, nSize);
+	g_pRingBuffers[ring].nRead = rtc;
+	g_pRingBuffers[ring].nCount -= offset;
+}
+
 int countBitOfRingBuffer(int ring)
 {
 	if (ring < 0 || ring >= g_nRingBuffer)
@@ -297,4 +316,31 @@ unsigned char watchBitsFromRingBuffer(int ring, int offset)
 		return (unsigned char)((g_pRingBuffers[ring].ptr[index0] << nBit) + (g_pRingBuffers[ring].ptr[index1] >> (8 - nBit)));
 	} else
 		return g_pRingBuffers[ring].ptr[index0];
+}
+
+void skipBitsFromRingBuffer(int ring, int offset)
+{
+	unsigned char *ptr;
+	int nRead;
+	int nSize;
+	int nOffset;
+	int	nBit;
+
+	if (ring < 0 || ring >= g_nRingBuffer)
+		return;
+
+	ptr = g_pRingBuffers[ring].ptr;
+	nRead = g_pRingBuffers[ring].nRead;
+	nSize = g_pRingBuffers[ring].nSize;
+	nOffset = offset / 8;
+	nBit = offset % 8;
+	if (g_pRingBuffers[ring].nReadBit + nBit >= 8) {
+		nOffset++;
+		nBit = g_pRingBuffers[ring].nReadBit + nBit - 8;
+	} else
+		nBit = g_pRingBuffers[ring].nReadBit + nBit;
+
+	g_pRingBuffers[ring].nRead = indexOfRingBuffer(nRead, nOffset, nSize);
+	g_pRingBuffers[ring].nReadBit = nBit;
+	g_pRingBuffers[ring].nCount -= nOffset;
 }
